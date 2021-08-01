@@ -8,22 +8,36 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.SqlServer;
 
 namespace ATMModel
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            Environment = env;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
+            if (Environment.IsDevelopment())
+            {
+                services.AddDbContext<ATMModelContext>(options =>
+                   options.UseSqlite(Configuration.GetConnectionString("ATMModelContextDevelop")));
+            }
+            else
+            {
+                services.AddDbContext<ATMModelContext>(options =>
+                   options.UseSqlServer(Configuration.GetConnectionString("ATMModelContext")));
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
