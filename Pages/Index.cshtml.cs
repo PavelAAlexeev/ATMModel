@@ -37,6 +37,13 @@ namespace ATMModel.Pages
                 return Page();
             }
 
+            if(string.IsNullOrEmpty(CardNumber))
+            {
+                return BadRequest();
+            }
+
+            CardNumber = CardNumber.Replace("-", "");
+
             if(string.IsNullOrEmpty(CardNumber) ||  CardNumber.Length != Card.CardNumberLength || 
                 !CardNumber.All(x => Char.IsDigit(x)) )
             {

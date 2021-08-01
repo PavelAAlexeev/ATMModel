@@ -20,28 +20,37 @@
         <input asp-for="CardNumber"
             type="text" 
             class="form-control"
-            placeholder="XXXX-XXXX-XXXX-XXXXX"
-            onkeypress="return checkDigit(event)
-            function checkDigit(event) {
-               var code = (event.which) ? event.which : event.keyCode;
-               console.log(code)
-                if ((code < 48 || code > 57) && (code > 31)) {
-                    return false;
-                }
-                return true;
-            }"
+            onkeypress="return false;"
         />
 
         @*<span asp-validation-for="CardNumber" class="text-danger"></span>*@
         <table class="keboard" align="center">
-            @for(int r = 0; r < 3; r++) 
+            @for(int r = 0; r < 4; r++) 
             {
                 <tr>
                 @for(int c = 0; c < 3; c++) 
                 {
                     <td>
-                        @{var buttonValue = r*3 + c;}
-                        <input type="button" value="@buttonValue" class="btn btn-primary" />            
+                        @{
+                            var buttonValue = r*3 + c;
+                            if(buttonValue > 9)
+                                break;
+                        }
+                        <input type="button" value="@buttonValue" class="btn btn-primary" 
+                            onclick="{
+                                console.log('onclick');
+                                var cardNumberStr = document.getElementById('CardNumber').value;
+                                console.log(cardNumberStr.length);
+                                
+                                var cardNumberStrLength = cardNumberStr.length
+                                if(cardNumberStrLength >= 19)
+                                    return;
+                                if(cardNumberStrLength == 4 || cardNumberStrLength == 9 || cardNumberStr.length == 14)
+                                    cardNumberStr += '-';
+                                cardNumberStr += this.value;
+                                document.getElementById('CardNumber').value = cardNumberStr;
+                            }"
+                        />            
                     </td>
                 }
                 </tr>
@@ -53,7 +62,7 @@
 
     <div class="form-submit">
         <input type="button" value="Очистить" class="btn btn-clear"
-            onclick="document.getElementById('CardNumber').value = null " />
+            onclick="document.getElementById('CardNumber').value = null;" />
         <input type="submit" value="Ok" class="btn btn-ok"/>
     </div>
 </form>
