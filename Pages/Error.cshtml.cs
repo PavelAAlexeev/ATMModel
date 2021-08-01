@@ -24,7 +24,7 @@ namespace ATMModel.Pages
             _logger = logger;
         }
 
-        public void OnGet()
+        public void OnGet(string errorMessage)
         {
             RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
         }

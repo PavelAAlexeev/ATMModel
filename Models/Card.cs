@@ -25,6 +25,7 @@ namespace ATMModel.Models
         public virtual User User { get; set; }
 
         public static int CardNumberLength = 16;
+        public static int AllowedWrongAttempts = 3;
 
     }
 }

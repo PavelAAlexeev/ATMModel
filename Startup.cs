@@ -11,6 +11,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer;
 
+using ATMModel.Logic.Abstract;
+using ATMModel.Logic.Implementation;
+
 namespace ATMModel
 {
     public class Startup
@@ -38,6 +41,10 @@ namespace ATMModel
                 services.AddDbContext<ATMModelContext>(options =>
                    options.UseSqlServer(Configuration.GetConnectionString("ATMModelContext")));
             }
+
+            services
+                .AddScoped<ICardLogic, CardLogic>()
+                .AddScoped<IAccessTokenLogic, AccessTokenLogic>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

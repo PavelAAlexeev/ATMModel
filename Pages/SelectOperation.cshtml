@@ -1,0 +1,24 @@
+﻿@page
+@model SelectOperationModel
+@{
+    ViewData["Title"] = "Выберите операцию";
+}
+
+
+<!DOCTYPE html>
+<head>
+</head>
+<body>
+<div class="text-center">
+    <h1 class="display-4">Выберите операцию</h1>
+</div>
+<form method="post">
+    <input type="hidden" asp-for="AccessToken" />
+    <input type="submit" class="btn-account" value="Баланс" asp-page-handler="Account"/>
+    <input type="submit" class="btn-withdraw" value ="Снять сумму" asp-page-handler="Withdraw"/>
+    <div>
+        <a asp-page="./Index">Выход</a> 
+    </div>
+</form>
+</body>
+</html>

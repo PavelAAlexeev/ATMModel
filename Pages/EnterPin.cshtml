@@ -1,7 +1,7 @@
 ﻿@page
-@model IndexModel
+@model EnterPINModel
 @{
-    ViewData["Title"] = "Login page";
+    ViewData["Title"] = "EnterPIN";
 }
 
 
@@ -10,14 +10,15 @@
 </head>
 <body>
 <div class="text-center">
-    <h1 class="display-4">Enter your card number</h1>
+    <h1 class="display-4">Enter your PIN number</h1>
 </div>
 <form method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="form-card-number">
-        <label asp-for="CardNumber" class="control-label"></label>
-        <input asp-for="CardNumber"
-            type="text"
+    <div class="form-pin-number">
+        <input type="hidden" asp-for="CardNumber" />
+        <label asp-for="PINNumber" class="control-label" title="PIN number"></label>
+        <input asp-for="PINNumber"
+            type="password"
             class="form-control"
             onkeypress="return false;"
         />
@@ -35,15 +36,15 @@
                         }
                         <input type="button" value="@buttonValue" class="btn btn-primary" 
                             onclick="{
-                                var cardNumberStr = document.getElementById('CardNumber').value;
+                                var pinNumberStr = document.getElementById('PINNumber').value;
+                                console.log(pinNumberStr);
                                 
-                                var cardNumberStrLength = cardNumberStr.length
-                                if(cardNumberStrLength >= 19)
+                                var pinNumberStrLength = pinNumberStr.length
+                                if(pinNumberStrLength >= 4)
                                     return;
-                                if(cardNumberStrLength == 4 || cardNumberStrLength == 9 || cardNumberStr.length == 14)
-                                    cardNumberStr += '-';
-                                cardNumberStr += this.value;
-                                document.getElementById('CardNumber').value = cardNumberStr;
+                                pinNumberStr += this.value;
+                                console.log(pinNumberStr);
+                                document.getElementById('PINNumber').value = pinNumberStr;
                             }"
                         />            
                     </td>
@@ -57,7 +58,7 @@
 
     <div class="form-submit">
         <input type="button" value="Очистить" class="btn btn-clear"
-            onclick="document.getElementById('CardNumber').value = null;" />
+            onclick="document.getElementById('PINNumber').value = null;" />
         <input type="submit" value="Ok" class="btn btn-ok"/>
     </div>
 </form>

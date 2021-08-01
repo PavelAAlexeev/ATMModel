@@ -7,19 +7,19 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using ATMModel.Models;
+using ATMModel.Logic.Abstract;
 
 namespace ATMModel.Pages
 {
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
+        private readonly ICardLogic _cardLogic;
 
-        private readonly ATMModelContext _context;
-
-        public IndexModel(ILogger<IndexModel> logger, ATMModelContext context)
+        public IndexModel(ILogger<IndexModel> logger, ICardLogic cardLogic)
         {
             _logger = logger;
-            _context = context;
+            _cardLogic = cardLogic;
         }
 
         [BindProperty]
@@ -36,7 +36,9 @@ namespace ATMModel.Pages
             {
                 return Page();
             }
-
+            
+            CardNumber = "1111-1111-1111-1111";
+            
             if(string.IsNullOrEmpty(CardNumber))
             {
                 return BadRequest();
@@ -44,25 +46,23 @@ namespace ATMModel.Pages
 
             CardNumber = CardNumber.Replace("-", "");
 
-            if(string.IsNullOrEmpty(CardNumber) ||  CardNumber.Length != Card.CardNumberLength || 
-                !CardNumber.All(x => Char.IsDigit(x)) )
+            if(!_cardLogic.IsNumberValid(CardNumber))
             {
                 return BadRequest();
             }
 
-            bool isCardExist = await _context.Card.AnyAsync(x => x.CardNumber == CardNumber);
-            if(!isCardExist) 
+            if(! await _cardLogic.IsCardExistAsync(CardNumber))
             {
                 return BadRequest();
             }
 
-            var isCardblocked = (await _context.Card.FirstOrDefaultAsync(x => x.CardNumber == CardNumber)).Blocked;
-            if(isCardblocked) 
+            if(await _cardLogic.IsCardBlockedAsync(CardNumber)) 
             {
                 return BadRequest();
             }
-
-            return RedirectToPage("./EnterPin");
+            string url = Url.Page("EnterPin", new {cardNumber=CardNumber});
+            return Redirect(url);
+            //return RedirectToPage("./EnterPin", CardNumber);
         }
     }
 }
