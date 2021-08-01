@@ -1,0 +1,35 @@
+﻿@page
+@model CardBalanceModel
+@{
+    ViewData["Title"] = "Выберите операцию";
+}
+
+<!DOCTYPE html>
+<head>
+</head>
+<body>
+<table class="table">
+    <tr>
+        <td>Номер карты</td>
+        <td>@Model.CardNumber</td>
+    </tr>
+    <tr>
+        <td>Дата</td>
+        <td>@Model.CurrentDateTime.ToLocalTime().ToShortDateString()</td>
+    </tr>
+    <tr>
+        <td>Сумма на счету</td>
+        <td>@Model.Ammount</td>
+    </tr>
+</table>
+
+<div class="text-center">
+    <h1 class="display-4">Выберите операцию</h1>
+</div>
+<form method="post">
+    <input type="hidden" asp-for="AccessToken" />
+    <input type="submit" class="btn-account" value="Назад" asp-page-handler="Back"/>
+    <input type="submit" class="btn-logiut" value ="Выход"  asp-page-handler="Logout"/> 
+</form>
+</body>
+</html>

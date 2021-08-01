@@ -27,6 +27,10 @@ namespace ATMModel.Pages
             _accessTokenLogic = accessTokenLogic;
         }
 
+
+        [BindProperty]
+        public string AccessToken { get; set; }
+
         public IActionResult OnGetAsync(string AccessToken)
         {
             if(!_accessTokenLogic.IsAccessTokenValid(AccessToken))
@@ -34,37 +38,25 @@ namespace ATMModel.Pages
                 return BadRequest();
             }
 
-            this.AccessToken = AccessToken;
+            this.AccessToken = _accessTokenLogic.RenewAccessToken(AccessToken);
 
             return Page();
         }
 
-        /*public IActionResult OnPost()
+        public IActionResult OnPostCardBalance()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            return Page();
-        }*/
-
-        //[HttpPost("button1")]
-        public IActionResult OnPostAccount()
-        {
-                return Page();
-            //...
+            return RedirectToPage("./CardBalance",  new {accessToken = AccessToken});
         }
 
-        //[HttpPost("button1")]
         public IActionResult OnPostWithdraw()
         {
                 return Page();
             //...
         }
 
-        [BindProperty]
-        public string AccessToken { get; set; }
-
+        public IActionResult OnPostLogout()
+        {
+            return RedirectToPage("./Index");
+        }
     }
 }

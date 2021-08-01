@@ -24,5 +24,10 @@ namespace ATMModel.Logic.Implementation
         {
             return cardNumber;
         }
+
+        public string GetCardNumberFromAccessToken(string token)
+        {
+            return token;
+        }
     }
 }

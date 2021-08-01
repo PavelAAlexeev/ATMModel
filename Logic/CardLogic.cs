@@ -12,6 +12,10 @@ namespace ATMModel.Logic.Implementation
 {
     public class CardLogic : ICardLogic
     {
+        protected static int CardNumberLength = 16;
+        protected static int AllowedWrongAttempts = 3;
+
+        protected static string DigitsGroupDelimiter = "-";
         
         private readonly ILogger<CardLogic> _logger;
 
@@ -29,9 +33,9 @@ namespace ATMModel.Logic.Implementation
                 return false;
             }
 
-            cardNumber = cardNumber.Replace("-", "");
+            cardNumber = CardNumberFromFormatted(cardNumber);
 
-            if(string.IsNullOrEmpty(cardNumber) ||  cardNumber.Length != Card.CardNumberLength || 
+            if(string.IsNullOrEmpty(cardNumber) ||  cardNumber.Length != CardNumberLength || 
                 !cardNumber.All(x => Char.IsDigit(x)) )
             {
                 return false;
@@ -53,6 +57,35 @@ namespace ATMModel.Logic.Implementation
                 .Blocked;
             return isCardBlocked;
         }
+
+        public async Task<Card> GetCardAsync(string cardNumber)
+        {
+            var card = await _context.Card.AsNoTracking()
+                .FirstOrDefaultAsync(x => x.CardNumber == cardNumber);
+
+            return card;
+        }
+
+        public string FormatCardNumber(string cardNumber)
+        {
+            var formattedCardNumber = new StringBuilder();
+            for(int i = 0; i < cardNumber.Length; i++)
+            {
+               formattedCardNumber.Append(cardNumber[i]);
+               if((i > 0) &&  i < (CardNumberLength - 1) && (i%4 == 3))
+               {
+                   formattedCardNumber.Append(DigitsGroupDelimiter);
+               } 
+            }
+            return formattedCardNumber.ToString();
+        }
+
+        public string CardNumberFromFormatted(string cardNumber)
+        {
+            return cardNumber.Replace(DigitsGroupDelimiter, "");
+        }
+
+
 
         public async Task<bool> CheckPINAsync(string cardNumber, string pin)
         {
@@ -86,7 +119,7 @@ namespace ATMModel.Logic.Implementation
                     else
                     {
                         card.CountOfWrongTry++;
-                        if(card.CountOfWrongTry > Card.AllowedWrongAttempts)
+                        if(card.CountOfWrongTry > AllowedWrongAttempts)
                         {
                             card.Blocked = true;
                         }

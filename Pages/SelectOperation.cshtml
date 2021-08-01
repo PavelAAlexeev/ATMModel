@@ -14,11 +14,9 @@
 </div>
 <form method="post">
     <input type="hidden" asp-for="AccessToken" />
-    <input type="submit" class="btn-account" value="Баланс" asp-page-handler="Account"/>
+    <input type="submit" class="btn-account" value="Баланс" asp-page-handler="CardBalance"/>
     <input type="submit" class="btn-withdraw" value ="Снять сумму" asp-page-handler="Withdraw"/>
-    <div>
-        <a asp-page="./Index">Выход</a> 
-    </div>
+    <input type="submit" class="btn-logiut" value ="Выход"  asp-page-handler="Logout"/> 
 </form>
 </body>
 </html>

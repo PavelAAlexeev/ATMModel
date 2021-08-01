@@ -44,7 +44,7 @@ namespace ATMModel.Pages
                 return BadRequest();
             }
 
-            CardNumber = CardNumber.Replace("-", "");
+            CardNumber = _cardLogic.CardNumberFromFormatted(CardNumber);
 
             if(!_cardLogic.IsNumberValid(CardNumber))
             {
