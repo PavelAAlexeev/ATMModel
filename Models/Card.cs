@@ -24,5 +24,7 @@ namespace ATMModel.Models
         //references
         public virtual User User { get; set; }
 
+        public static int CardNumberLength = 16;
+
     }
 }

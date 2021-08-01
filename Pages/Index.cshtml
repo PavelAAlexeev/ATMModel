@@ -4,6 +4,58 @@
     ViewData["Title"] = "Login page";
 }
 
+
+<!DOCTYPE html>
+<head>
+</head>
+<body>
 <div class="text-center">
     <h1 class="display-4">Enter your card number</h1>
 </div>
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    @*<input type="hidden" asp-for="User.ID" />*@
+    <div class="form-card-number">
+        <label asp-for="CardNumber" class="control-label"></label>
+        <input asp-for="CardNumber"
+            type="text" 
+            class="form-control"
+            placeholder="XXXX-XXXX-XXXX-XXXXX"
+            onkeypress="return checkDigit(event)
+            function checkDigit(event) {
+               var code = (event.which) ? event.which : event.keyCode;
+               console.log(code)
+                if ((code < 48 || code > 57) && (code > 31)) {
+                    return false;
+                }
+                return true;
+            }"
+        />
+
+        @*<span asp-validation-for="CardNumber" class="text-danger"></span>*@
+        <table class="keboard" align="center">
+            @for(int r = 0; r < 3; r++) 
+            {
+                <tr>
+                @for(int c = 0; c < 3; c++) 
+                {
+                    <td>
+                        @{var buttonValue = r*3 + c;}
+                        <input type="button" value="@buttonValue" class="btn btn-primary" />            
+                    </td>
+                }
+                </tr>
+            }  
+        </table>
+    </div>
+    <hr>
+    </hr>
+
+    <div class="form-submit">
+        <input type="button" value="Очистить" class="btn btn-clear"
+            onclick="document.getElementById('CardNumber').value = null " />
+        <input type="submit" value="Ok" class="btn btn-ok"/>
+    </div>
+</form>
+</body>
+</html>
