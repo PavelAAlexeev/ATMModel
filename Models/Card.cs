@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace ATMModel.Models
 {
@@ -23,5 +24,7 @@ namespace ATMModel.Models
 
         //references
         public virtual User User { get; set; }
+
+        public virtual ICollection<Operation> Operations { get; set; }
     }
 }

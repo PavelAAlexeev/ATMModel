@@ -1,5 +1,5 @@
 ﻿@page
-@model CardBalanceModel
+@model WithdrawReportModel
 @{
     ViewData["Title"] = "Выберите операцию";
 }
@@ -20,13 +20,17 @@
                 var serverDate = new Date('@Model.OperationDateTime');
                 var offsetms = new Date().getTimezoneOffset() * 60 * 1000;
                 var localDate = new Date(serverDate.valueOf() - offsetms);
-                document.write(localDate.toLocaleDateString());
+                document.write(localDate.toLocaleString());
             </script>                    
         </td>
     </tr>
     <tr>
         <td>Сумма на счету</td>
         <td>@Model.Balance</td>
+    </tr>
+    <tr>
+        <td>Снятая сумма</td>
+        <td>@Model.Amount</td>
     </tr>
 </table>
 

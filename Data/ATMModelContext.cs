@@ -15,7 +15,7 @@ public class ATMModelContext : DbContext
 
     public DbSet<ATMModel.Models.User> User { get; set; }
     public DbSet<ATMModel.Models.Card> Card { get; set; }
-
+    public DbSet<ATMModel.Models.Operation> Operation { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

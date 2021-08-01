@@ -44,7 +44,9 @@ namespace ATMModel
 
             services
                 .AddScoped<ICardLogic, CardLogic>()
-                .AddScoped<IAccessTokenLogic, AccessTokenLogic>();
+                .AddScoped<IAccessTokenLogic, AccessTokenLogic>()
+                .AddScoped<ICardOperationLogic, CardOperationLogic>()
+            ;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

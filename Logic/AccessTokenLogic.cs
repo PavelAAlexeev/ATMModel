@@ -1,14 +1,9 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
-
 using ATMModel.Logic.Abstract;
-using ATMModel.Models;
 
 namespace ATMModel.Logic.Implementation
 {
+
+    //TODO IMPLEMENT TOKEN. Now it is just CardNumber. Need to pack it (and issueing time) into JWT 
     public class AccessTokenLogic : IAccessTokenLogic  
     {
         public bool IsAccessTokenValid(string token)

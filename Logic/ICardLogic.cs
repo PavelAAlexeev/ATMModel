@@ -1,6 +1,7 @@
+using System;
 using System.Threading.Tasks;
 
-using ATMModel.Models;
+using ATMModel.Logic.Datatypes;
 namespace ATMModel.Logic.Abstract
 {
     public interface ICardLogic
@@ -11,7 +12,7 @@ namespace ATMModel.Logic.Abstract
         public Task<bool> CheckPINAsync(string cardNumber, string pin);
         public string FormatCardNumber(string cardNumber);
         public string CardNumberFromFormatted(string cardNumber);
-
-        public Task<Card> GetCardAsync(string cardNumber);
+        public Task<Decimal> GetCardBalanceAsync(string cardNumber);
+        public Task<WithdrawResult> WithdrawAsync(string cardNumber, decimal ammount);
     }
 }

@@ -10,14 +10,14 @@ using ATMModel.Models;
 using ATMModel.Logic.Abstract;
 namespace ATMModel.Pages
 {
-    public class EnterPINModel : PageModel
+    public class EnterPinModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
 
         private readonly ICardLogic _cardLogic;
         private readonly IAccessTokenLogic _accessTokenLogic;
 
-        public EnterPINModel(ILogger<IndexModel> logger, ICardLogic cardLogic, IAccessTokenLogic accessTokenLogic)
+        public EnterPinModel(ILogger<IndexModel> logger, ICardLogic cardLogic, IAccessTokenLogic accessTokenLogic)
         {
             _logger = logger;
             _cardLogic = cardLogic;

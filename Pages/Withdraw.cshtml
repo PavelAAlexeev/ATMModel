@@ -1,0 +1,64 @@
+﻿@page
+@model WithdrawModel
+@{
+    ViewData["Title"] = "Withdraw page";
+}
+
+
+<!DOCTYPE html>
+<head>
+</head>
+<body>
+<div class="text-center">
+    <h1 class="display-4">Введите сумму</h1>
+</div>
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-amount">
+        <label asp-for="Amount" class="control-label"></label>
+        <input asp-for="Amount"
+            type="text"
+            class="form-control"
+            onkeypress="return false;"
+        />
+        <table class="keboard" align="center">
+            @for(int r = 0; r < 4; r++) 
+            {
+                <tr>
+                @for(int c = 0; c < 3; c++) 
+                {
+                    <td>
+                        @{
+                            var buttonValue = r*3 + c;
+                            if(buttonValue > 9)
+                                break;
+                        }
+                        <input type="button" value="@buttonValue" class="btn btn-primary" 
+                            onclick="{
+                                var amountStr = document.getElementById('Amount').value;
+                                if(amountStr == '0')
+                                    amountStr = this.value;
+                                else
+                                    amountStr += this.value;
+                                document.getElementById('Amount').value = amountStr;
+                            }"
+                        />            
+                    </td>
+                }
+                </tr>
+            }  
+        </table>
+    </div>
+    <hr>
+    </hr>
+
+    <div class="form-submit">
+        <input type="hidden" asp-for="AccessToken" />
+        <input type="button" class="btn-clear" value="Очистить"
+            onclick="document.getElementById('Amount').value = null;" />
+        <input type="submit" class="btn-ok" value="OК" asp-page-handler="OK"/>
+        <input type="submit" class="btn-logout" value ="Выход" asp-page-handler="Logout"/> 
+    </div>
+</form>
+</body>
+</html>

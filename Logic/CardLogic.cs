@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using ATMModel.Logic.Abstract;
-using ATMModel.Models;
+using ATMModel.Logic.Datatypes;
 
 namespace ATMModel.Logic.Implementation
 {
@@ -20,11 +20,16 @@ namespace ATMModel.Logic.Implementation
         private readonly ILogger<CardLogic> _logger;
 
         private readonly ATMModelContext _context;
+        private readonly ICardOperationLogic _cardOperationLogic;
 
-        public CardLogic(ILogger<CardLogic> logger, ATMModelContext context)
+        public CardLogic(
+            ILogger<CardLogic> logger,
+            ATMModelContext context,
+            ICardOperationLogic cardOperationLogic)
         {
             _logger = logger;
             _context = context;
+            _cardOperationLogic = cardOperationLogic;
         }
         public bool IsNumberValid(string cardNumber)
         {
@@ -58,13 +63,39 @@ namespace ATMModel.Logic.Implementation
             return isCardBlocked;
         }
 
-        public async Task<Card> GetCardAsync(string cardNumber)
+        public async Task<Decimal> GetCardBalanceAsync(string cardNumber)
         {
             var card = await _context.Card.AsNoTracking()
                 .FirstOrDefaultAsync(x => x.CardNumber == cardNumber);
-
-            return card;
+            await _cardOperationLogic.AddCheckBalanceAsync(card.ID);
+            await _context.SaveChangesAsync();
+            return card.Balance;
         }
+
+        public async Task<WithdrawResult> WithdrawAsync(string cardNumber, decimal amount)
+        {
+            var card = await _context.Card
+                .FirstOrDefaultAsync(x => x.CardNumber == cardNumber);
+            if(amount > 0 && card.Balance >= amount)
+            {
+                await _cardOperationLogic.AddWithdrawAsync(card.ID, amount);
+                card.Balance -= amount; 
+
+                await _context.SaveChangesAsync();
+                return new WithdrawResult{
+                    Result = true,
+                    NewBalance = card.Balance
+                };
+            }
+            else
+            {
+                return new WithdrawResult{
+                    Result = false,
+                    NewBalance = card.Balance
+                };
+            }
+        }
+
 
         public string FormatCardNumber(string cardNumber)
         {
@@ -84,7 +115,6 @@ namespace ATMModel.Logic.Implementation
         {
             return cardNumber.Replace(DigitsGroupDelimiter, "");
         }
-
 
 
         public async Task<bool> CheckPINAsync(string cardNumber, string pin)

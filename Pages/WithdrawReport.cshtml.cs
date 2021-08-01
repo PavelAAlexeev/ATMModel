@@ -11,13 +11,13 @@ using ATMModel.Logic.Abstract;
 
 namespace ATMModel.Pages
 {
-    public class CardBalanceModel : PageModel
+    public class WithdrawReportModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
         private readonly ICardLogic _cardLogic;
         private readonly IAccessTokenLogic _accessTokenLogic;
 
-        public CardBalanceModel(
+        public WithdrawReportModel(
             ILogger<IndexModel> logger,
             ICardLogic cardLogic,
             IAccessTokenLogic accessTokenLogic)
@@ -37,9 +37,17 @@ namespace ATMModel.Pages
         public DateTime OperationDateTime { get; set; }
 
         [BindProperty]
+        public Decimal Amount { get; set; }
+        
+        [BindProperty]
         public Decimal Balance { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(string accessToken)
+        public IActionResult OnGet(
+            string accessToken,
+            DateTime dateTime,
+            decimal amount,
+            decimal balance
+            )
         {
             if(!_accessTokenLogic.IsAccessTokenValid(accessToken))
             {
@@ -48,14 +56,14 @@ namespace ATMModel.Pages
             this.AccessToken = _accessTokenLogic.RenewAccessToken(accessToken);
 
             var cardNumber = _accessTokenLogic.GetCardNumberFromAccessToken(accessToken);
-            var cardBalance = await _cardLogic.GetCardBalanceAsync(cardNumber);
+            var cardBalance = balance;
             var formattedCardNumber = _cardLogic.FormatCardNumber(cardNumber);
 
 
             this.CardNumber = formattedCardNumber;
-            this.OperationDateTime = DateTime.UtcNow;
-            this.Balance = cardBalance;
-
+            this.OperationDateTime = dateTime;
+            this.Amount = amount;
+            this.Balance = balance;
 
             return Page();
         }

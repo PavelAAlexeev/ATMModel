@@ -1,7 +1,7 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Login page";
+    ViewData["Title"] = "Ввод номера карты";
 }
 
 
@@ -10,12 +10,12 @@
 </head>
 <body>
 <div class="text-center">
-    <h1 class="display-4">Enter your card number</h1>
+    <h1 class="display-4">Введите номер карты</h1>
 </div>
 <form method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-card-number">
-        <label asp-for="CardNumber" class="control-label"></label>
+        <label asp-for="CardNumber" title="Номер карты" class="control-label"></label>
         <input asp-for="CardNumber"
             type="text"
             class="form-control"
@@ -56,9 +56,9 @@
     </hr>
 
     <div class="form-submit">
-        <input type="button" value="Очистить" class="btn btn-clear"
+        <input type="button" value="Очистить" class="btn-clear"
             onclick="document.getElementById('CardNumber').value = null;" />
-        <input type="submit" value="Ok" class="btn btn-ok"/>
+        <input type="submit" value="OК" class="btn-ok"/>
     </div>
 </form>
 </body>

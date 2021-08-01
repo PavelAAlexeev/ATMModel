@@ -36,33 +36,34 @@ namespace ATMModel.Pages
             {
                 return Page();
             }
-            
-            CardNumber = "1111-1111-1111-1111";
+            if(string.IsNullOrEmpty(CardNumber))
+                CardNumber = "1111-1111-1111-1111";
             
             if(string.IsNullOrEmpty(CardNumber))
             {
-                return BadRequest();
+                return RedirectToPage("./Error", new {errorMessage = "Номер карты не введен"});
             }
 
             CardNumber = _cardLogic.CardNumberFromFormatted(CardNumber);
 
             if(!_cardLogic.IsNumberValid(CardNumber))
             {
-                return BadRequest();
+                return RedirectToPage("./Error", new {errorMessage = "Неправильный формат номера карты"});
             }
 
             if(! await _cardLogic.IsCardExistAsync(CardNumber))
             {
-                return BadRequest();
+                return RedirectToPage("./Error", new {errorMessage = "Карты с таким номером не существует"});
             }
 
             if(await _cardLogic.IsCardBlockedAsync(CardNumber)) 
             {
-                return BadRequest();
+                return RedirectToPage("./Error", new {errorMessage = "Карта заблокирована"});
             }
+            
             string url = Url.Page("EnterPin", new {cardNumber=CardNumber});
             return Redirect(url);
-            //return RedirectToPage("./EnterPin", CardNumber);
+
         }
     }
 }

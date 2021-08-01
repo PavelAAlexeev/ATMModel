@@ -32,5 +32,18 @@ namespace ATMModel.DataAccess.EF.DBSchema
                 .HasIndex(x => x.CardNumber)
                 .IsUnique(true);
         }
+
+        private static void SetupDbSchemaOperations(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Operation>()
+                .HasOne(x => x.Card)
+                .WithMany(x => x.Operations);
+
+            modelBuilder.Entity<Operation>()
+                .HasIndex(x => x.CardId);
+            modelBuilder.Entity<Operation>()
+                .HasIndex(x => x.Date);
+        }
+
     }
 }

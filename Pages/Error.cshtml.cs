@@ -24,8 +24,14 @@ namespace ATMModel.Pages
             _logger = logger;
         }
 
+
+        [BindProperty]
+        public string AccessToken { get; set; }
+        [BindProperty]
+        public string ErrorMessage { get; set; }
         public void OnGet(string errorMessage)
         {
+            ErrorMessage = errorMessage;
             RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
         }
     }

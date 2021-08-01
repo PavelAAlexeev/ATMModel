@@ -2,14 +2,16 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ATMModel.Migrations
 {
     [DbContext(typeof(ATMModelContext))]
-    partial class ATMModelContextModelSnapshot : ModelSnapshot
+    [Migration("20210801201354_AddedOperations")]
+    partial class AddedOperations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,9 +58,6 @@ namespace ATMModel.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
-
-                    b.Property<decimal>("BalanceChange")
-                        .HasColumnType("TEXT");
 
                     b.Property<int>("CardId")
                         .HasColumnType("INTEGER");
