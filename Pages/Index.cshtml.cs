@@ -36,8 +36,6 @@ namespace ATMModel.Pages
             {
                 return Page();
             }
-            if(string.IsNullOrEmpty(CardNumber))
-                CardNumber = "1111-1111-1111-1111";
             
             if(string.IsNullOrEmpty(CardNumber))
             {

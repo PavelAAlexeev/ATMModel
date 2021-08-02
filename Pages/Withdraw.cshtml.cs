@@ -35,9 +35,8 @@ namespace ATMModel.Pages
         {
             if(!_accessTokenLogic.IsAccessTokenValid(AccessToken))
             {
-                return BadRequest();
+                return RedirectToPage("./Error", new {errorMessage = "Сессия завершена"});
             }
-
             this.AccessToken = _accessTokenLogic.RenewAccessToken(AccessToken);
 
             return Page();
@@ -58,13 +57,13 @@ namespace ATMModel.Pages
             var cardNumber = _accessTokenLogic.GetCardNumberFromAccessToken(AccessToken);
             if(await _cardLogic.IsCardBlockedAsync(cardNumber))
             {
-                return RedirectToPage("./Error", new {errorMessage = "Карта заблокирована"});
+                return RedirectToPage("./Error", new {errorMessage = "Карта заблокирована", AccessToken = AccessToken});
             }
 
             var withdrawResult = await _cardLogic.WithdrawAsync(cardNumber, Amount);
             if(!withdrawResult.Result)
             {
-                return RedirectToPage("./Error", new {errorMessage = "Не удалось снять деньги"});
+                return RedirectToPage("./Error", new {ErrorMessage = "Не удалось снять деньги", AccessToken = AccessToken});
             }
             
             string url = Url.Page("WithdrawReport", new 

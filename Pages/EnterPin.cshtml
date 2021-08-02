@@ -1,7 +1,7 @@
 ﻿@page
 @model EnterPinModel
 @{
-    ViewData["Title"] = "EnterPIN";
+    ViewData["Title"] = "PIN";
 }
 
 
@@ -10,13 +10,13 @@
 </head>
 <body>
 <div class="text-center">
-    <h1 class="display-4">Enter your PIN number</h1>
+    <h1 class="display-4">Введите PIN</h1>
 </div>
 <form method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-pin-number">
         <input type="hidden" asp-for="CardNumber" />
-        <label asp-for="PINNumber" class="control-label" title="PIN number"></label>
+        <label asp-for="PINNumber" class="control-label">PIN</label>
         <input asp-for="PINNumber"
             type="password"
             class="form-control"

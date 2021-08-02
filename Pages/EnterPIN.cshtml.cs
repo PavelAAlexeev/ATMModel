@@ -31,12 +31,10 @@ namespace ATMModel.Pages
         
         public async Task<IActionResult> OnGetAsync(string cardNumber)
         {
-            //var cardNumber = id;
-
             if(! await _cardLogic.IsCardExistAsync(cardNumber) 
                 && ! await _cardLogic.IsCardBlockedAsync(cardNumber) )
             {
-                return BadRequest();
+                return RedirectToPage("./Error", new {errorMessage = "Сессия завершена"});
             }
             CardNumber = cardNumber;
 
@@ -50,8 +48,6 @@ namespace ATMModel.Pages
                 return Page();
             }
             
-            PINNumber = "0000";
-
             if(! await _cardLogic.CheckPINAsync(CardNumber, PINNumber)) 
             {
                 return RedirectToPage("./Error", new {errorMessage = "ПИН-код введен неправильно"});

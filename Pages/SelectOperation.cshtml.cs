@@ -35,7 +35,7 @@ namespace ATMModel.Pages
         {
             if(!_accessTokenLogic.IsAccessTokenValid(AccessToken))
             {
-                return BadRequest();
+                return RedirectToPage("./Error", new {errorMessage = "Сессия завершена"});
             }
 
             this.AccessToken = _accessTokenLogic.RenewAccessToken(AccessToken);
