@@ -4,6 +4,7 @@ using ATMModel.Models;
 using System;
 using System.Linq;
 
+using ATMModel.Logic.Abstract;
 namespace ATMModel.DataAccess.EF.DBSeeder
 {
     public static class SeedData
@@ -18,17 +19,18 @@ namespace ATMModel.DataAccess.EF.DBSeeder
                 {
                     return;
                 }
+                var cardLogic = serviceProvider.GetRequiredService<ICardLogic>();
 
                 var user1 = new User
-                    {
-                        FirstName = "Pavel",
-                        LastName = "Alexeev",
-                    };
+                {
+                    FirstName = "Pavel",
+                    LastName = "Alexeev",
+                };
                 var user2 = new User
-                    {
-                        FirstName = "Русская",
-                        LastName = "Фамилия",
-                    };
+                {
+                    FirstName = "Русская",
+                    LastName = "Фамилия",
+                };
                 context.User.AddRange(user1, user2);
 
                 var card1 = new Card
@@ -37,7 +39,7 @@ namespace ATMModel.DataAccess.EF.DBSeeder
                     Blocked = false,
                     CardNumber = "1111111111111111",
                     CountOfWrongTry = 0,
-                    HashedPin = "",
+                    HashedPin = cardLogic.GenerateHashedPIN("0000"),
                     User = user1,
                 };
 
@@ -47,7 +49,7 @@ namespace ATMModel.DataAccess.EF.DBSeeder
                     Blocked = true,
                     CardNumber = "1111111111111112",
                     CountOfWrongTry = 0,
-                    HashedPin = "",
+                    HashedPin = cardLogic.GenerateHashedPIN("0000"),
                     User = user1,
                 };
 
@@ -57,7 +59,7 @@ namespace ATMModel.DataAccess.EF.DBSeeder
                     Blocked = false,
                     CardNumber = "1111111111111113",
                     CountOfWrongTry = 3,
-                    HashedPin = "",
+                    HashedPin = cardLogic.GenerateHashedPIN("0000"),
                     User = user1,
                 };
 
@@ -67,7 +69,7 @@ namespace ATMModel.DataAccess.EF.DBSeeder
                     Blocked = false,
                     CardNumber = "1111111111111114",
                     CountOfWrongTry = 0,
-                    HashedPin = "",
+                    HashedPin = cardLogic.GenerateHashedPIN("0000"),
                     User = user2,
                 };
 

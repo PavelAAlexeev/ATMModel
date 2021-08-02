@@ -10,6 +10,7 @@ namespace ATMModel.Logic.Abstract
         public Task<bool> IsCardExistAsync(string cardNumber);
         public Task<bool> IsCardBlockedAsync(string cardNumber);
         public Task<bool> CheckPINAsync(string cardNumber, string pin);
+        public string GenerateHashedPIN(string pin);
         public string FormatCardNumber(string cardNumber);
         public string CardNumberFromFormatted(string cardNumber);
         public Task<Decimal> GetCardBalanceAsync(string cardNumber);

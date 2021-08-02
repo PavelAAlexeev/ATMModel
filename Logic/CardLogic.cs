@@ -116,8 +116,7 @@ namespace ATMModel.Logic.Implementation
             return cardNumber.Replace(DigitsGroupDelimiter, "");
         }
 
-
-        public async Task<bool> CheckPINAsync(string cardNumber, string pin)
+        public string GenerateHashedPIN(string pin)
         {
             using (SHA256 sha256 = SHA256.Create())
             {
@@ -126,40 +125,46 @@ namespace ATMModel.Logic.Implementation
                 byte[] pinHash2 = sha256.ComputeHash(pinHash);
                 Array.Clear(pinBytes, 0, pin.Length);
                 Array.Clear(pinHash, 0, pinHash.Length);
-                
 
-                var card = await _context.Card.FirstOrDefaultAsync(x => x.CardNumber == cardNumber);
-                if(card == null)
-                {
-                    throw new Exception("No card with requested number");
-                }
-                
-                if(card.Blocked)
-                {
-                    throw new Exception("The requested card is blocked");
-                }
+                return BitConverter.ToString( pinHash2 );
+            }
+        }
 
-                try
+        public async Task<bool> CheckPINAsync(string cardNumber, string pin)
+        {
+            var hashedPin = GenerateHashedPIN(pin);
+
+            var card = await _context.Card.FirstOrDefaultAsync(x => x.CardNumber == cardNumber);
+            if(card == null)
+            {
+                throw new Exception("No card with requested number");
+            }
+            
+            if(card.Blocked)
+            {
+                throw new Exception("The requested card is blocked");
+            }
+
+            try
+            {
+                if(card.HashedPin == hashedPin)
                 {
-                    if(card.HashedPin ==  BitConverter.ToString( pinHash2 ))
-                    {
-                        card.CountOfWrongTry = 0;
-                        return true;
-                    }
-                    else
-                    {
-                        card.CountOfWrongTry++;
-                        if(card.CountOfWrongTry > AllowedWrongAttempts)
-                        {
-                            card.Blocked = true;
-                        }
-                        return false;
-                    }
+                    card.CountOfWrongTry = 0;
+                    return true;
                 }
-                finally
+                else
                 {
-                    await _context.SaveChangesAsync();
+                    card.CountOfWrongTry++;
+                    if(card.CountOfWrongTry > AllowedWrongAttempts)
+                    {
+                        card.Blocked = true;
+                    }
+                    return false;
                 }
+            }
+            finally
+            {
+                await _context.SaveChangesAsync();
             }
         }
     }
